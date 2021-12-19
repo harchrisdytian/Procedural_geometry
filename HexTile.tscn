@@ -4,13 +4,14 @@
 [ext_resource path="res://Roboto-MediumItalic.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="SpatialMaterial" id=6]
+flags_vertex_lighting = true
 vertex_color_use_as_albedo = true
 params_cull_mode = 2
 
 [sub_resource type="ArrayMesh" id=3]
 
 [sub_resource type="DynamicFont" id=4]
-size = 500
+size = 300
 font_data = ExtResource( 2 )
 
 [sub_resource type="ViewportTexture" id=5]
@@ -39,15 +40,16 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Viewport/CenterContainer"]
-margin_left = 191.0
-margin_right = 856.0
-margin_bottom = 1177.0
+margin_left = 324.0
+margin_top = 169.0
+margin_right = 723.0
+margin_bottom = 878.0
 custom_fonts/font = SubResource( 4 )
 text = "0,1
 "
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0.233064, 0 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.233064, 0 )
 opacity = 0.88
 alpha_cut = 2
 texture = SubResource( 5 )
