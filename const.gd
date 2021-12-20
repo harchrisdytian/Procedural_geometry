@@ -17,13 +17,11 @@ enum direction {NE,E,SE,SW,W,NW}
 static func opposite(direction):
 	return ( direction + 3) if direction < 3 else (direction - 3)  
 func next_direction(_direction):
-	return direction.NW if _direction == direction.NE else _direction + 1
+	return direction.NE if _direction == direction.NW else _direction + 1
+
 func previous_direction(_direction):
-	return direction.NE if _direction == direction.NW else _direction  - 1
-func get_first_corner(direction):
-	return corners[direction]
+	return direction.NW if _direction == direction.NE else _direction - 1
 	
-func get_second_corner(direction):
-	return corners[direction + 1] 
+
 	
 

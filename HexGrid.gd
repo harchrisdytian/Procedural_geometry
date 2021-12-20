@@ -9,6 +9,7 @@ var cells = []
 
 var colors = [Color(0,1,0),Color(0,0,1),Color(1,0,0)]
 var color = colors[0]
+var elevation_value = 1
 func _init():
 	var i = 0
 	for y in range(height):
@@ -38,8 +39,12 @@ func mouse_click():
 		print(cells[index].name)
 		cells[index].cell_color = color
 		cells[index].generate_geometery()
+		cells[index].elevation += elevation_value
+		cells[index].update_neighbors()
 		print(coords)
 
+func change_elevation(v1,v2):
+	elevation_value = v2
 func _process(delta):
 	
 	if Input.is_action_pressed("up"):
@@ -49,7 +54,7 @@ func _process(delta):
 	if Input.is_action_pressed("left"):
 		$Camera.transform.origin.x -=camspeed
 	if Input.is_action_pressed("right"):
-		$Camera.transform.origin.x +=camspeed
+		$Camera.transform.	origin.x +=camspeed
 	
 func create_cells(x,z,index):
 	var pos = Vector3()
@@ -68,15 +73,17 @@ func create_cells(x,z,index):
 		if (z & 1)== 0:
 			hexcell.set_neighbor(variables.direction.SE, cells[index - width])
 			if x > 0:
-				hexcell.set_neighbor(variables.direction.SW, cells[index - width-1])
+				hexcell.set_neighbor(variables.direction.SW, cells[index - width - 1])
 		else:
-			hexcell.set_neighbor(variables.direction.SW, cells[index - width-1])
+			hexcell.set_neighbor(variables.direction.SW, cells[index - width])
 			if x < width-1:
 				hexcell.set_neighbor(variables.direction.SE, cells[index - width+1])
 	add_child(hexcell)
 	cells.append(hexcell)
 
-
+func triangulate_connection(driection,v1,v2):
+	pass
+	 
 
 func change_color(button_pressed, color_index):
 	color = colors[color_index]
