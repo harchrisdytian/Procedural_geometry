@@ -4,8 +4,9 @@
 [ext_resource path="res://Roboto-MediumItalic.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="SpatialMaterial" id=6]
-flags_vertex_lighting = true
+flags_use_shadow_to_opacity = true
 vertex_color_use_as_albedo = true
+params_diffuse_mode = 1
 params_cull_mode = 2
 
 [sub_resource type="ArrayMesh" id=3]
@@ -18,7 +19,10 @@ font_data = ExtResource( 2 )
 viewport_path = NodePath("Viewport")
 
 [node name="HexTile" type="MeshInstance"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.05872, 0 )
 material_override = SubResource( 6 )
+cast_shadow = 2
+lightmap_scale = 1
 mesh = SubResource( 3 )
 script = ExtResource( 1 )
 

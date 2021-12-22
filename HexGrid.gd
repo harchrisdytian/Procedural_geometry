@@ -1,7 +1,7 @@
 extends Spatial
 export var height = 6
 export var width = 6
-export var camspeed = 0.5
+export var camspeed = 70
 var cast_result
 
 
@@ -17,6 +17,7 @@ func _init():
 			
 			create_cells(x,y,i)
 			i+=1
+
 
 func _input(event):
 	if event.is_action_pressed("left_mouse"):
@@ -48,13 +49,13 @@ func change_elevation(v1,v2):
 func _process(delta):
 	
 	if Input.is_action_pressed("up"):
-		$Camera.transform.origin.z+=camspeed
+		$Camera.transform.origin.z-=camspeed*delta
 	if Input.is_action_pressed("down"):
-		$Camera.transform.origin.z-=camspeed
+		$Camera.transform.origin.z+=camspeed*delta
 	if Input.is_action_pressed("left"):
-		$Camera.transform.origin.x -=camspeed
+		$Camera.transform.origin.x -=camspeed*delta
 	if Input.is_action_pressed("right"):
-		$Camera.transform.	origin.x +=camspeed
+		$Camera.transform.	origin.x +=camspeed*delta
 	
 func create_cells(x,z,index):
 	var pos = Vector3()
