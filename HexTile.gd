@@ -22,12 +22,12 @@ var cell_color = Color(0.5,0.5,0.5)
 const solid_factor = 0.75 
 const blend_factor = 1 - solid_factor
 #elevation
-const tarreces_per_slope = 2 
-const tarreces_steps= tarreces_per_slope * 2 + 1
+const terraces_per_slope = 2 
+const terraces_steps= terraces_per_slope * 2 + 1
 
-const horizontal_step_size  = 1.0 / tarreces_steps
+const horizontal_step_size  = 1.0 / terraces_steps
 
-const vertical_step_size = 1.0 / (tarreces_per_slope + 1.0)
+const vertical_step_size = 1.0 / (terraces_per_slope + 1.0)
 
 const step_factor = 5.0
 var elevation = 0 setget set_elevation, get_elevation
@@ -39,7 +39,7 @@ func set_elevation(_elevation):
 	translation.y = (elevation * step_factor)
 	generate_geometery()
 	
-func tarrace_lerp(a:Vector3, b:Vector3, step:int) -> Vector3:
+func terrace_lerp(a:Vector3, b:Vector3, step:int) -> Vector3:
 	var h = step * horizontal_step_size
 	var c = a
 	c.x +=  ((b.x - a.x) * h)
@@ -50,7 +50,7 @@ func tarrace_lerp(a:Vector3, b:Vector3, step:int) -> Vector3:
 	return c
 
 
-func color_tarrace_lerp(a:Color,b:Color, step):
+func color_terrace_lerp(a:Color,b:Color, step):
 	var h = step * horizontal_step_size
 	return a.linear_interpolate(b,h)
 	
@@ -83,8 +83,6 @@ func triangulate_connection(direction,v1,v2):
 	else: 
 		return
 		
-		
-	
 	var bridge = get_bridge(direction)
 	var bridge_color = (cell_color + neighbor.cell_color)*0.5
 	var v3 =v1 + bridge
@@ -93,7 +91,7 @@ func triangulate_connection(direction,v1,v2):
 
 	v4.y = v3.y
 	if get_edge_type(direction) == variables.HexEdgeType.SLOPE:
-		triangulate_tarrace_connection(v1,v2, cell_color,v3,v4, neighbor.cell_color)
+		triangulate_terrace_connection(v1,v2, cell_color,v3,v4, neighbor.cell_color)
 	else:
 		add_quad(v1,v2,v3,v4)
 		add_quad_color_two(cell_color,neighbor.cell_color)
@@ -106,43 +104,43 @@ func triangulate_connection(direction,v1,v2):
 		v5.y = (next_neighbor.elevation - elevation) * step_factor
 		if elevation <= neighbor.elevation:
 				if elevation <= next_neighbor.elevation:
-					triangulate_coner(v2,self,v4,neighbor,v5,next_neighbor)
+					triangulate_corner(v2,self,v4,neighbor,v5,next_neighbor)
 				else:
-					triangulate_coner(v5,next_neighbor,v2,self,v4,neighbor)
+					triangulate_corner(v5,next_neighbor,v2,self,v4,neighbor)
 					
 		elif neighbor.elevation <= next_neighbor.elevation:
-			triangulate_coner(v4, neighbor, v5, next_neighbor, v2, self)
+			triangulate_corner(v4, neighbor, v5, next_neighbor, v2, self)
 		else:
-			triangulate_coner(v5, next_neighbor, v2, self, v4, neighbor)
+			triangulate_corner(v5, next_neighbor, v2, self, v4, neighbor)
 		
 #		add_triangle(v2,v4,v5)
 #		add_triangle_colors(cell_color,neighbor.cell_color,next_neighbor.cell_color)
 		
 
-func triangulate_tarrace_connection(
+func triangulate_terrace_connection(
 	_begin_left, _begin_right, _begin_color,
 	_end_left,_end_right, _end_color
 	):
-	var v3 = tarrace_lerp(_begin_left,_end_left, 1)
-	var v4 = tarrace_lerp(_begin_right,_end_right,1)
-	var c1 = color_tarrace_lerp(_begin_color,_end_color,1)
+	var v3 = terrace_lerp(_begin_left,_end_left, 1)
+	var v4 = terrace_lerp(_begin_right,_end_right,1)
+	var c1 = color_terrace_lerp(_begin_color,_end_color,1)
 	
 	#print("is_running" + str(v3)+ str(v4))
 #	print(str(_begin_left)+" "+str(v3)+ " "+ str(_begin_right) + " " + str(v4))
 	add_quad(_begin_left,_begin_right,v3,v4)
 	add_quad_color_two(_begin_color,c1)
 	
-	for i in range(2,tarreces_steps+1, 1):
+	for i in range(2,terraces_steps+1, 1):
 		var v1 = v3
 		var v2 = v4
 		var c2 = c1
-		v3 = tarrace_lerp(_begin_left,_end_left, i)
-		v4 = tarrace_lerp(_begin_right,_end_right, i)
-		c1 = color_tarrace_lerp(_begin_color,_end_color,i)
+		v3 = terrace_lerp(_begin_left,_end_left, i)
+		v4 = terrace_lerp(_begin_right,_end_right, i)
+		c1 = color_terrace_lerp(_begin_color,_end_color,i)
 		add_quad(v1,v2,v3,v4)
 		add_quad_color_two(c2,c1)
 
-func triangulate_coner(
+func triangulate_corner(
 	bottom, bottom_edge,
 	left, left_edge,
 	right, right_edge):
@@ -152,54 +150,54 @@ func triangulate_coner(
 		
 		if left_edge_type == variables.HexEdgeType.SLOPE:
 			if right_edge_type == variables.HexEdgeType.SLOPE:
-				triangulate_coner_tarrace(bottom, bottom_edge, left, left_edge, right, right_edge)
+				triangulate_corner_terrace(bottom, bottom_edge, left, left_edge, right, right_edge)
 				return
 			if right_edge_type == variables.HexEdgeType.FLAT:
-				triangulate_coner_tarrace(left,left_edge, right ,right_edge, bottom, bottom_edge)
+				triangulate_corner_terrace(left,left_edge, right ,right_edge, bottom, bottom_edge)
 				return
-			triangulate_coner_tarrace_cliff(bottom,bottom_edge,left,left_edge,right,right_edge)
+			triangulate_corner_terrace_cliff(bottom,bottom_edge,left,left_edge,right,right_edge)
 			return
 		if right_edge_type == variables.HexEdgeType.SLOPE:
 			if left_edge_type == variables.HexEdgeType.FLAT:
-				triangulate_coner_tarrace(right,right_edge,bottom,bottom_edge,left,left_edge)
+				triangulate_corner_terrace(right,right_edge,bottom,bottom_edge,left,left_edge)
 				return
-			triangulate_coner_cliff_tarrace(bottom,bottom_edge,left,left_edge,right,right_edge)
+			triangulate_corner_cliff_terrace(bottom,bottom_edge,left,left_edge,right,right_edge)
 			return
 		if left_edge.get_edge_type_from_cell(right_edge) ==variables.HexEdgeType.SLOPE:
 			if left_edge.elevation < right_edge.elevation:
-				triangulate_coner_cliff_tarrace(right,right_edge,bottom,bottom_edge,left,left_edge)
+				triangulate_corner_cliff_terrace(right,right_edge,bottom,bottom_edge,left,left_edge)
 			else:
-				triangulate_coner_tarrace_cliff(left,left_edge,right,right_edge,bottom,bottom_edge)
+				triangulate_corner_terrace_cliff(left,left_edge,right,right_edge,bottom,bottom_edge)
 		add_triangle(bottom,left,right)
 		add_triangle_colors(bottom_edge.cell_color,left_edge.cell_color,right_edge.cell_color)
 
-func triangulate_coner_tarrace(
+func triangulate_corner_terrace(
 	begin, begin_edge,
 	left, left_edge,
 	right, right_edge):
-		var v3 =tarrace_lerp(begin,left,1)
-		var v4 = tarrace_lerp(begin, right,1)
-		var c3 = color_tarrace_lerp(begin_edge.cell_color, left_edge.cell_color, 1)
-		var c4 =color_tarrace_lerp(begin_edge.cell_color, right_edge.cell_color,1)
+		var v3 =terrace_lerp(begin,left,1)
+		var v4 = terrace_lerp(begin, right,1)
+		var c3 = color_terrace_lerp(begin_edge.cell_color, left_edge.cell_color, 1)
+		var c4 =color_terrace_lerp(begin_edge.cell_color, right_edge.cell_color,1)
 		
 		add_triangle(begin,v3,v4)
 		add_triangle_colors(begin_edge.cell_color,c3,c4)
-		for i in range(2,tarreces_steps+1, 1):
+		for i in range(2,terraces_steps+1, 1):
 			var v1 = v3
 			var v2 = v4
 			var c1 = c3
 			var c2 = c4
-			v3 = tarrace_lerp(begin,left, i)
-			v4 = tarrace_lerp(begin,right, i)
-			c3 = color_tarrace_lerp(begin_edge.cell_color,left_edge.cell_color,i)
-			c4 = color_tarrace_lerp(begin_edge.cell_color,right_edge.cell_color,i)
+			v3 = terrace_lerp(begin,left, i)
+			v4 = terrace_lerp(begin,right, i)
+			c3 = color_terrace_lerp(begin_edge.cell_color,left_edge.cell_color,i)
+			c4 = color_terrace_lerp(begin_edge.cell_color,right_edge.cell_color,i)
 			add_quad(v1,v2,v3,v4)
 			add_quad_color(c1,c2,c3,c4)
 		add_quad(v3,v4,left, right)
 		add_quad_color(c3,c4,left_edge.cell_color,right_edge.cell_color)
 
 
-func triangulate_coner_tarrace_cliff(
+func triangulate_corner_terrace_cliff(
 	begin:Vector3, begin_edge,
 	left:Vector3, left_edge,
 	right:Vector3, right_edge):
@@ -216,7 +214,8 @@ func triangulate_coner_tarrace_cliff(
 		else:
 			add_triangle(left,right,boundry)
 			add_triangle_colors(left_edge.cell_color,right_edge.cell_color,boundry_color)
-func triangulate_coner_cliff_tarrace(
+
+func triangulate_corner_cliff_terrace(
 	begin:Vector3, begin_edge,
 	left:Vector3, left_edge,
 	right:Vector3, right_edge):
@@ -239,15 +238,15 @@ func triangulate_boundry_triangle(
 	begin:Vector3, begin_edge,
 	left:Vector3, left_edge,
 	boundry:Vector3, boundry_color):
-		var v2 = tarrace_lerp(begin,left,1) 
-		var c2 = color_tarrace_lerp(begin_edge.cell_color,left_edge.cell_color,1)
+		var v2 = terrace_lerp(begin,left,1) 
+		var c2 = color_terrace_lerp(begin_edge.cell_color,left_edge.cell_color,1)
 		add_triangle(begin,v2,boundry)
 		add_triangle_colors(begin_edge.cell_color,c2, boundry_color)
-		for i in range(2,tarreces_steps+1, 1):
+		for i in range(2,terraces_steps+1, 1):
 			var v1 = v2
 			var c1 = c2
-			v2 = tarrace_lerp(begin,left,i)
-			c2 = color_tarrace_lerp(begin_edge.cell_color,left_edge.cell_color,i)
+			v2 = terrace_lerp(begin,left,i)
+			c2 = color_terrace_lerp(begin_edge.cell_color,left_edge.cell_color,i)
 			add_triangle(v1,v2,boundry)
 			add_triangle_colors(c1,c2,boundry_color)
 		add_triangle(v2,left,boundry)

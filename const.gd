@@ -15,6 +15,7 @@ var  corners = [
 		]
 enum direction {NE,E,SE,SW,W,NW}
 enum HexEdgeType { FLAT,SLOPE,CLIFF}
+
 static func opposite(direction):
 	return ( direction + 3) if direction < 3 else (direction - 3)  
 func next_direction(_direction):

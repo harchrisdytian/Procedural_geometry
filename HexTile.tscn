@@ -4,10 +4,13 @@
 [ext_resource path="res://Roboto-MediumItalic.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="SpatialMaterial" id=6]
-flags_use_shadow_to_opacity = true
+flags_vertex_lighting = true
+flags_ensure_correct_normals = true
 vertex_color_use_as_albedo = true
 params_diffuse_mode = 1
-params_cull_mode = 2
+params_cull_mode = 1
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.45
 
 [sub_resource type="ArrayMesh" id=3]
 

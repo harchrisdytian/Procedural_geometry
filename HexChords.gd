@@ -1,5 +1,4 @@
 extends Reference
-
 class_name HexChords
 
 var x :int

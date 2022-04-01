@@ -46,6 +46,8 @@ func mouse_click():
 
 func change_elevation(v1,v2):
 	elevation_value = v2
+	
+
 func _process(delta):
 	
 	if Input.is_action_pressed("up"):
