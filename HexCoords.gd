@@ -1,5 +1,5 @@
 extends Reference
-class_name HexChords
+class_name HexCoords
 
 var x :int
 var z :int
@@ -19,7 +19,7 @@ func to_new_line_string():
 	return str(x) + "\n" + str(self.y) +"\n" + str(z)
 #equivilents of static methiods
 static func to_offset_Coordinates(_x:int,_z:int):
-	var new = variables.hexChordsClass.new(_x - _z / 2,_z)
+	var new = variables.hexCoordsClass.new(_x - _z / 2,_z)
 	return new
 	
 static func to_hex_coords(pos:Vector3):
@@ -36,4 +36,4 @@ static func to_hex_coords(pos:Vector3):
 		printerr("hexCoords invailid")
 	
 	
-	return variables.hexChordsClass.new(intX,intZ)
+	return variables.hexCoordsClass.new(intX,intZ)

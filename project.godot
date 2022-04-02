@@ -10,12 +10,12 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
-"class": "HexChords",
+"class": "HexCoords",
 "language": "GDScript",
-"path": "res://HexChords.gd"
+"path": "res://HexCoords.gd"
 } ]
 _global_script_class_icons={
-"HexChords": ""
+"HexCoords": ""
 }
 
 [application]

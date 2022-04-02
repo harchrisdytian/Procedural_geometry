@@ -10,6 +10,7 @@ var cells = []
 var colors = [Color(0,1,0),Color(0,0,1),Color(1,0,0)]
 var color = colors[0]
 var elevation_value = 1
+
 func _init():
 	var i = 0
 	for y in range(height):
@@ -35,7 +36,7 @@ func mouse_click():
 	if cast_result:
 		var coord_position = cast_result.position
 		
-		var coords=  HexChords.to_hex_coords(coord_position)
+		var coords=  HexCoords.to_hex_coords(coord_position)
 		var index = coords.x + coords.z * width + coords.z / 2
 		print(cells[index].name)
 		cells[index].cell_color = color
@@ -66,8 +67,8 @@ func create_cells(x,z,index):
 	pos.z = z * (variables.OUTER_RADIUS * 1.5)
 	
 	var hexcell = variables.hexTile.instance()
-	hexcell.chords = HexChords.new(x,z)
-	hexcell.chords = hexcell.chords.to_offset_Coordinates(x,z)
+	hexcell.coords = HexCoords.new(x,z)
+	hexcell.coords = hexcell.coords.to_offset_Coordinates(x,z)
 	hexcell.set_label(" ")
 	hexcell.transform.origin = pos
 	if x > 0:

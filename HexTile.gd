@@ -17,7 +17,7 @@ var normals = PoolVector3Array()
 var indices = PoolIntArray()
 var colors = PoolColorArray()
 ##colors
-var chords: HexChords 
+var coords 
 var cell_color = Color(0.5,0.5,0.5)
 const solid_factor = 0.75 
 const blend_factor = 1 - solid_factor
@@ -388,8 +388,8 @@ func generate_collision():
 	add_child(collision_body)
 
 func set_label(text):
-	#if chords:
-	$Viewport/CenterContainer/Label.text = chords.to_new_line_string()
+	#if coords:
+	$Viewport/CenterContainer/Label.text = coords.to_new_line_string()
 
 #####################
 ## neighbor gen######
